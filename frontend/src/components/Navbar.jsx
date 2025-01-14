@@ -20,16 +20,16 @@ const Navbar = () => {
         justifyContent={"space-between"}
         flexDirection={{ base: "column", sm: "row" }}
       >
-        <Link to={"/"}>
+      
           <Text
             bgGradient="linear(to-r, cyan.400, blue.500)"
             bgClip="text"
             fontSize={{ base: "22", sm: "28" }}
             fontWeight="extrabold"
           >
-            Product Store
+           <Link to={"/"}>Product Store 🛒</Link>
           </Text>
-        </Link>
+     
         <HStack spacing={2} alignItems="center">
           <Link to={"/create"}>
             <Button>
