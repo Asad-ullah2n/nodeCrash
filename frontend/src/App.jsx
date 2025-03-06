@@ -1,19 +1,35 @@
-import { Box, Button, useColorModeValue } from "@chakra-ui/react";
-import { Routes, Route } from "react-router-dom";
+import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Create from "./pages/Create";
 import Navbar from "./components/Navbar";
 import AuthPage from "./pages/AuthPage";
-
+import { useUserStore } from "./store/user";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 function App() {
+  const location = useLocation();
+  const showNavbar = location.pathname !== "/";
+  const { isAuthenticated } = useUserStore();
+  
   return (
-    // <div>hello</div>
     <Box minH={"100vh"} bg={useColorModeValue("gray.100", "gray.900")}>
-      {/* <Navbar /> */}
+      {showNavbar && isAuthenticated && <Navbar />}
       <Routes>
-        <Route path="/" element={<AuthPage />} />
-        <Route path="/create" element={<Create />} />
-        {/* <Route path="*" element={<Error404 />} /> */}
+        {isAuthenticated ? (
+          <>
+            {/* Protected Routes */}
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/create" element={<Create />} />
+            <Route path="*" element={<Navigate to="/home" />} />
+          </>
+        ) : (
+          <>
+            {/* Auth Routes */}
+            <Route path="/" element={<AuthPage />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </>
+        )}
       </Routes>
     </Box>
   );
